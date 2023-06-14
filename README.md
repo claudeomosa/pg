@@ -4,7 +4,7 @@
 
 ## Usage
 
-The following exapmle shows how to parse a CSV file
+The following example shows how to parse a CSV file
 
 ```elixir
 {:ok, records} = CustomerRecordParser.parse_csv_file("test/fixtures/customers.csv")
