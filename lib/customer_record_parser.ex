@@ -127,7 +127,11 @@ defmodule CustomerRecordParser do
       {:error, "Date of birth cannot be empty."}
     else
       case Date.from_iso8601(dob) do
-        {:ok, parsed_dob} -> {:ok, parsed_dob}
+        {:ok, parsed_dob} -> if parsed_dob > Date.utc_today() do
+                               {:error, "Date of birth cannot be in the future: #{dob}"}
+                             else
+                               {:ok, parsed_dob}
+                             end
         _ -> {:error, "Invalid date of birth: #{dob}"}
       end
     end
