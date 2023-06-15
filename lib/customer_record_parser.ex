@@ -8,17 +8,20 @@ defmodule CustomerRecordParser do
     %{
       name: "Kenya",
       id: 1,
-      sites: [235, 657, 887]
+      sites: [235, 657, 887],
+      code: "254"
     },
     %{
       name: "Sierra Leone",
       id: 2,
-      sites: [772, 855]
+      sites: [772, 855],
+      code: "232"
     },
     %{
       name: "Nigeria",
       id: 3,
-      sites: [465, 811, 980]
+      sites: [465, 811, 980],
+      code: "234"
     }
   ]
 
@@ -96,8 +99,8 @@ defmodule CustomerRecordParser do
     } = row
 
     with {:ok, parsed_dob} <- parse_date_of_birth(dob),
-         {:ok, parsed_phone} <- parse_telephone_number(phone),
          {:ok, parsed_country_id} <- parse_country_id(country_id),
+         {:ok, parsed_phone} <- parse_telephone_number(parsed_country_id, phone),
          {:ok, parsed_site_code} <- parse_site_code(parsed_country_id, site_code),
          {:ok, name} <- verify_name(name) do
       {:ok,
@@ -128,10 +131,9 @@ defmodule CustomerRecordParser do
     else
       case Date.from_iso8601(dob) do
         {:ok, parsed_dob} ->
-          if parsed_dob > Date.utc_today() do
-            {:error, "Date of birth cannot be in the future: #{dob}"}
-          else
-            {:ok, parsed_dob}
+          case Date.compare(parsed_dob, Date.utc_today()) do
+            :gt -> {:error, "Date of birth cannot be in the future: #{dob}"}
+            _ -> {:ok, parsed_dob}
           end
 
         _ ->
@@ -140,15 +142,23 @@ defmodule CustomerRecordParser do
     end
   end
 
-  defp parse_telephone_number(phone) do
+  defp parse_telephone_number(country_id, phone) do
     if phone != "" do
       number = String.replace(phone, "+", "")
       pattern = ~r/^[a-zA-Z]+$/
+      country_code = Enum.find(@countries, fn country -> country.id == country_id end).code
 
       if Regex.match?(pattern, number) do
         {:error, "Invalid phone number: #{phone}"}
       else
-        {:ok, number}
+        # {:ok, number}
+        case String.slice(number, 0..2) do
+          code when code == country_code ->
+            {:ok, number}
+
+          _ ->
+            {:error, "Invalid phone number: #{phone}, country code does not match country ID"}
+        end
       end
     else
       {:error, "Phone number cannot be empty."}
