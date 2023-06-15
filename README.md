@@ -4,7 +4,9 @@
 
 ## Usage
 * Run `mix setup` to install and setup dependencies
+* Run tests with  `mix test`
 * The following example shows how to parse a CSV file, open `iex` with `iex -S mix`
+* You can also run `h CustomerRecordParser.parse_csv_file` in `iex`
 
 ```elixir
 {:ok, records} = CustomerRecordParser.parse_csv_file("test/fixtures/customers.csv")
