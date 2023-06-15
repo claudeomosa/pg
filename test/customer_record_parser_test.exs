@@ -2,7 +2,7 @@ defmodule CustomerRecordParserTest do
   use ExUnit.Case, async: true
 
   alias CustomerRecordParser
-  alias Country
+
 
   test "parse_csv_file/1 returns a list of customer records" do
     expected =
