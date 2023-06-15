@@ -9,12 +9,12 @@ defmodule CustomerRecordParserTest do
       {:ok,
        [
          ok: %{
-           country_id: 2,
+           country_id: 1,
            dob: ~D[1990-01-01],
            name: "John Doe",
            national_id: "123456789",
            phone: "254722000000",
-           site_code: 772
+           site_code: 657
          },
          ok: %{
            country_id: 1,
@@ -33,13 +33,9 @@ defmodule CustomerRecordParserTest do
     expected =
       {:ok,
        [
-         ok: %{
-           country_id: 2,
-           dob: ~D[1990-01-01],
-           name: "John Doe",
-           national_id: "123456789",
-           phone: "254722000000",
-           site_code: 772
+         error: %{
+           error: "Invalid phone number: 254722000000, country code does not match country ID",
+           line: 1
          },
          ok: %{
            country_id: 1,
