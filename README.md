@@ -9,7 +9,7 @@
 * You can also run `h CustomerRecordParser.parse_csv_file` in `iex`
 
 ```elixir
-{:ok, records} = CustomerRecordParser.parse_csv_file("test/fixtures/customers.csv")
+{:ok, records} = CustomerRecordParser.parse_csv_file("test/fixtures/record.csv")
 #=> {:ok,[
 #=>   ok: %{
 #=>     country_id: 2,
