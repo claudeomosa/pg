@@ -3,8 +3,8 @@
 **A program that takes a CSV file as input, and returns either a Customer record or an error for each row**
 
 ## Usage
-
-The following example shows how to parse a CSV file
+* Run `mix setup` to install and setup dependencies
+* The following example shows how to parse a CSV file, open `iex` with `iex -S mix`
 
 ```elixir
 {:ok, records} = CustomerRecordParser.parse_csv_file("test/fixtures/customers.csv")
