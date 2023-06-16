@@ -1,8 +1,8 @@
-# PG
+## PG
 
-**A program that takes a CSV file as input, and returns either a Customer record or an error for each row**
+***A program that takes a CSV file as input, and returns either a Customer record or an error for each row***
 
-## Usage
+### iex Usage
 * Run `mix setup` to install and setup dependencies
 * Run tests with  `mix test`
 * The following example shows how to parse a CSV file, open `iex` with `iex -S mix`
@@ -21,4 +21,21 @@
 #=>     },
 #=>   ]
 #=> }
+```
+
+### HTTP
+ * Run `mix setup` to install dependencies
+ * Run tests with  `mix test`
+ * Run `mix run --no-halt` to start a minimalistic plug-based web server
+ 
+ * Visit [`localhost:4000/pg/valid_records`](http://localhost:4000/pg/valid_records) from your browser. To view a test record with only valid records.
+ * Visit [`localhost:4000/pg/with_invalid_records`](http://localhost:4000/pg/with_invalid_records) from your browser.  To view a test record with dirty records.
+
+**Endpoints**
+
+```http
+    GET /pg/valid_records 
+```
+```http
+    GET /pg/with_invalid_records
 ```
