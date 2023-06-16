@@ -28,8 +28,8 @@
  * Run tests with  `mix test`
  * Run `mix run --no-halt` to start a minimalistic plug-based web server
  
- * Visit [`localhost:4000/pg/valid_records`](http://localhost:4000/pg/valid_records) from your browser. To view a test record with only valid records.
- * Visit [`localhost:4000/pg/with_invalid_records`](http://localhost:4000/pg/with_invalid_records) from your browser.  To view a test record with dirty records.
+ * Visit [`localhost:4000/pg/valid_records`](http://localhost:4000/pg/valid_records) . To get a test record with only valid records.
+ * Visit [`localhost:4000/pg/with_invalid_records`](http://localhost:4000/pg/with_invalid_records) .  To get a test record with dirty records.
 
 **Endpoints**
 
