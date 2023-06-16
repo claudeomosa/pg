@@ -157,7 +157,7 @@ defmodule CustomerRecordParser do
             {:ok, number}
 
           _ ->
-            {:error, "Invalid phone number: #{phone}, country code does not match country ID"}
+            {:error, "Invalid phone number: #{phone}, country code does not match country code"}
         end
       end
     else
