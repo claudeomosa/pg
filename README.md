@@ -3,7 +3,7 @@
 ***A program that takes a CSV file as input, and returns either a Customer record or an error for each row***
 
 ### iex Usage
-* Run `mix setup` to install and setup dependencies
+* Run `mix deps.get` to install dependencies
 * Run tests with  `mix test`
 * The following example shows how to parse a CSV file, open `iex` with `iex -S mix`
 * You can also run `h CustomerRecordParser.parse_csv_file` in `iex`
@@ -24,7 +24,7 @@
 ```
 
 ### HTTP
- * Run `mix setup` to install dependencies
+ * Run `mix deps.get` to install dependencies
  * Run tests with  `mix test`
  * Run `mix run --no-halt` to start a minimalistic plug-based web server
  
