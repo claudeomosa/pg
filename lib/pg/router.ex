@@ -5,6 +5,12 @@ defmodule PG.Router do
   plug(:match)
   plug(:dispatch)
 
+  get "/" do
+    {:ok, record} = CustomerRecordParser.parse_csv_file("test/fixtures/pg_records.csv")
+    pg_records = Enum.map(record, fn {_key, value} -> value end)
+    send_resp(conn, 200, Poison.encode!(%{"pg_records" => pg_records}))
+  end
+
   get "/pg/valid_records" do
     {:ok, record} = CustomerRecordParser.parse_csv_file("test/fixtures/record.csv")
     valid_records = Enum.map(record, fn {_key, value} -> value end)

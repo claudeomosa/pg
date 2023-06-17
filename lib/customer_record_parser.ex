@@ -25,13 +25,6 @@ defmodule CustomerRecordParser do
     }
   ]
 
-  @spec parse_csv_file(
-          binary
-          | maybe_improper_list(
-              binary | maybe_improper_list(any, binary | []) | char,
-              binary | []
-            )
-        ) :: {:error, <<_::152>>} | {:ok, list}
   @doc """
     Parses a CSV file and returns a list of customer records and an error for each invalid record.
     Returns an error if the file does not exist.
@@ -118,79 +111,83 @@ defmodule CustomerRecordParser do
   end
 
   defp verify_name(name) do
-    if name == "" do
-      {:error, "Name cannot be empty."}
-    else
-      {:ok, name}
+    case name do
+      "" -> {:error, "Name cannot be empty."}
+      _ -> {:ok, name}
     end
   end
 
   defp parse_date_of_birth(dob) do
-    if dob == "" do
-      {:error, "Date of birth cannot be empty."}
-    else
-      case Date.from_iso8601(dob) do
-        {:ok, parsed_dob} ->
+    case dob do
+      "" ->
+        {:error, "Date of birth cannot be empty."}
+
+      _ ->
+        with {:ok, parsed_dob} <- Date.from_iso8601(dob) do
           case Date.compare(parsed_dob, Date.utc_today()) do
             :gt -> {:error, "Date of birth cannot be in the future: #{dob}"}
             _ -> {:ok, parsed_dob}
           end
-
-        _ ->
-          {:error, "Invalid date of birth: #{dob}"}
-      end
+        else
+          {:error, _} -> {:error, "Invalid date of birth: #{dob}"}
+        end
     end
   end
 
   defp parse_telephone_number(country_id, phone) do
-    if phone != "" do
-      number = String.replace(phone, "+", "")
-      pattern = ~r/^[a-zA-Z]+$/
-      country_code = Enum.find(@countries, fn country -> country.id == country_id end).code
+    case phone do
+      "" ->
+        {:error, "Phone number cannot be empty."}
 
-      if Regex.match?(pattern, number) do
-        {:error, "Invalid phone number: #{phone}"}
-      else
-        # {:ok, number}
-        case String.slice(number, 0..2) do
-          code when code == country_code ->
-            {:ok, number}
+      _ ->
+        number = String.replace(phone, "+", "")
+        pattern = ~r/^[a-zA-Z]+$/
+        country_code = Enum.find(@countries, fn country -> country.id == country_id end).code
 
-          _ ->
-            {:error, "Invalid phone number: #{phone}, country code does not match country code"}
+        if Regex.match?(pattern, number) do
+          {:error, "Invalid phone number: #{phone}"}
+        else
+          case String.slice(number, 0..2) do
+            code when code == country_code ->
+              {:ok, number}
+
+            _ ->
+              {:error, "Invalid phone number: #{phone}, country code does not match country code"}
+          end
         end
-      end
-    else
-      {:error, "Phone number cannot be empty."}
     end
   end
 
   defp parse_country_id(country_id) do
-    if country_id == "" do
-      {:error, "Country ID cannot be empty."}
-    else
-      case String.to_integer(country_id) do
-        id ->
-          case Enum.find(@countries, fn country -> country.id == id end) do
-            nil -> {:error, "Invalid country ID: #{country_id}"}
-            country -> {:ok, country.id}
-          end
-      end
+    case country_id do
+      "" ->
+        {:error, "Country ID cannot be empty."}
+
+      _ ->
+        case String.to_integer(country_id) do
+          id ->
+            case Enum.find(@countries, fn country -> country.id == id end) do
+              nil -> {:error, "Invalid country ID: #{country_id}"}
+              country -> {:ok, country.id}
+            end
+        end
     end
   end
 
   defp parse_site_code(country_id, site_code) do
-    if site_code != "" do
-      parsed_site_code = String.to_integer(site_code)
+    case site_code do
+      "" ->
+        {:error, "Site Code cannot be empty."}
 
-      country_name = Enum.find(@countries, fn country -> country.id == country_id end).name
+      _ ->
+        parsed_site_code = String.to_integer(site_code)
 
-      case Enum.find(@countries, &site_belongs_to_country?(&1, country_id, parsed_site_code)) do
-        nil -> {:error, "Site code #{site_code} does not exist in #{country_name}."}
-        _ -> {:ok, parsed_site_code}
-      end
-    else
-      {:error, "Site Code cannot be empty."}
+        country_name = Enum.find(@countries, fn country -> country.id == country_id end).name
+
+        case Enum.find(@countries, &site_belongs_to_country?(&1, country_id, parsed_site_code)) do
+          nil -> {:error, "Site code #{site_code} does not exist in #{country_name}."}
+          _ -> {:ok, parsed_site_code}
+        end
     end
   end
 
