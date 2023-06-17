@@ -34,8 +34,9 @@
 **Endpoints**
 
 ```http
+    GET /
+
     GET /pg/valid_records 
-```
-```http
+
     GET /pg/with_invalid_records
 ```
