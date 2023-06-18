@@ -3,7 +3,6 @@ defmodule CustomerRecordParserTest do
 
   alias CustomerRecordParser
 
-
   test "parse_csv_file/1 returns a list of customer records" do
     expected =
       {:ok,
@@ -34,7 +33,7 @@ defmodule CustomerRecordParserTest do
       {:ok,
        [
          error: %{
-           error: "Invalid phone number: 254722000000, country code does not match country ID",
+           error: "Invalid phone number: 254722000000, country code does not match country code",
            line: 1
          },
          ok: %{
