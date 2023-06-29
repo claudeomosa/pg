@@ -164,12 +164,13 @@ defmodule CustomerRecordParser do
         {:error, "Country ID cannot be empty."}
 
       _ ->
-        case String.to_integer(country_id) do
-          id ->
+        case Integer.parse(country_id) do
+          {id, _} ->
             case Enum.find(@countries, fn country -> country.id == id end) do
               nil -> {:error, "Invalid country ID: #{country_id}"}
               country -> {:ok, country.id}
             end
+          _ -> {:error, "Invalid country ID: make sure it is a number"}
         end
     end
   end
